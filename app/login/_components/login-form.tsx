@@ -14,8 +14,10 @@ import { useForm } from "react-hook-form"
 import z, { object, string } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { startTransition, useState } from "react"
-import { useAuth } from "@/app/contexts/AuthContext"
+// import { useAuth } from "@/app/contexts/AuthContext"
 import { useRouter } from "next/navigation"
+import { AuthService } from "@/lib/services/auth.services"
+import { toast } from "sonner"
 
 const loginSchema = object({
   email: string({ error: "Email is required" })
@@ -33,7 +35,7 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
 
     const [error, setError] = useState<string | null>(null);
-    const { user, login } = useAuth();
+    // const { user, login } = useAuth();
     const router = useRouter();
 
      const form = useForm<z.infer<typeof loginSchema>>({
@@ -48,14 +50,17 @@ export function LoginForm({
         try {
             setError(null);
             startTransition(async () => {
-                await login(values.email, values.password);
+                // await login(values.email, values.password);
+                await AuthService.signIn(values.email, values.password);
                 router.push("/main");
+                toast.success('Inicio de sesión exitoso');
             });
         } catch (error) {
             if(error instanceof Error) {
                 console.log(error)
             }
-            alert("Error al Iniciar Sesión")
+            toast.error('Error al iniciar sesión');
+            // alert("Error al Iniciar Sesión")
         }
         
     }

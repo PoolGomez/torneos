@@ -1,12 +1,13 @@
 "use client"
+import { useAuth } from "@/hooks/use-auth";
 import Image from "next/image";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 // import { useAuth } from "./contexts/AuthContext";
 
 export default function Home() {
-  // const auth = useAuth();
+  const {user} = useAuth();
   // const user = auth?.user;
-  // const router = useRouter()
+  const router = useRouter()
 
 
 
@@ -14,14 +15,14 @@ export default function Home() {
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
        <p>HOME</p>
-       {/* {
+       {
         user ? (
             <button className="bg-green-500" onClick={()=>router.push("/main")}>entrar</button>
         ):(
             <button className="bg-green-500" onClick={()=>router.push("/login")}>login</button>
 
         )
-       } */}
+       }
        
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
