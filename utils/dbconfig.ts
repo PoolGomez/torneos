@@ -7,12 +7,12 @@ import { getAuth } from "firebase/auth";
 // https://firebase.google.com/docs/web/setup#available-libraries
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBJUzdbMiMzzFxC55IOWCfRCSKUA9M0iL0",
-  authDomain: "tournaments-app-dev.firebaseapp.com",
-  projectId: "tournaments-app-dev",
-  storageBucket: "tournaments-app-dev.firebasestorage.app",
-  messagingSenderId: "274077239567",
-  appId: "1:274077239567:web:29d47371deef6265a7567a"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
 // Initialize Firebase
