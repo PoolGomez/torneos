@@ -8,15 +8,20 @@ import { useTeams } from "@/hooks/use-teams";
 import { Team } from "@/lib/schemas";
 import { TeamService } from "@/lib/services/team.services";
 import { toast } from "sonner";
-import { TeamForm } from "@/components/teams/team-form";
+import { CreateTeamForm } from "@/components/teams/create-team-form";
 import { TeamCard } from "@/components/teams/team-card";
+import { EditTeamForm } from "@/components/teams/edit-team-form";
+import { ImageTeamForm } from "@/components/teams/image-team-form";
 
 const MainPage = () => {
     const router = useRouter()
     const {user , loading: authLoading } = useAuth();
     // const [isLoading, setIsLoading] = useState(true);
 
-    const [showForm, setShowForm] = useState(false);
+    const [showCreateForm, setShowCreateForm] = useState(false);
+    const [showEditForm, setShowEditForm] = useState(false);
+    const [showImageForm, setShowImageForm] = useState(false);
+
     const { teams, loading: teamsLoading, refetch } = useTeams();
     const [editingTeam, setEditingTeam] = useState<Team | undefined>();
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -52,6 +57,7 @@ const MainPage = () => {
         await TeamService.updateTeam(editingTeam.id!, data);
         toast.success('Equipo actualizado exitosamente');
         setEditingTeam(undefined);
+        setShowEditForm(false)
         refetch();
         } catch (error) {
             console.log(error)
@@ -60,6 +66,26 @@ const MainPage = () => {
         setIsSubmitting(false);
         }
     };
+
+    const handleUpdateImageTeam = async (imageUrl: string ) => {
+        if (!editingTeam) return;
+
+        try {
+        setIsSubmitting(true);
+        await TeamService.updateImageTeam(editingTeam.id!, imageUrl);
+        toast.success('Imagen actualizada exitosamente');
+        setEditingTeam(undefined);
+        setShowImageForm(false)
+        refetch();
+        } catch (error) {
+            console.log(error)
+        toast.error('Error al actualizar imagen el equipo');
+        } finally {
+        setIsSubmitting(false);
+        }
+    };
+
+
 
     const handleCreateTeam = async (data: { name: string; description?: string }) => {
         if (!user) return;
@@ -72,7 +98,7 @@ const MainPage = () => {
             ownerId: user.uid,
         });
         toast.success('Equipo creado exitosamente');
-        setShowForm(false);
+        setShowCreateForm(false);
         refetch();
         } catch (error) {
             console.log(error)
@@ -83,13 +109,20 @@ const MainPage = () => {
     };
 
      const handleCancelForm = () => {
-        setShowForm(false);
+        setShowCreateForm(false);
+        setShowEditForm(false);
+        setShowImageForm(false);
         setEditingTeam(undefined);
     };
 
     const handleEditTeam = (team: Team) => {
         setEditingTeam(team);
-        setShowForm(true);
+        setShowEditForm(true);
+    };
+
+    const handleEditImageTeam = (team: Team) => {
+        setEditingTeam(team);
+        setShowImageForm(true);
     };
 
     const handleViewTeam = (team: Team) => {
@@ -109,21 +142,43 @@ const MainPage = () => {
             <h1 className="text-3xl font-bold text-gray-900">Mis Equipos</h1>
             <p className="text-gray-600 mt-2">Gestiona y organiza tus equipos</p>
           </div>
-          <Button onClick={() => setShowForm(true)} className="flex items-center gap-2">
+          <Button onClick={() => setShowCreateForm(true)} className="flex items-center gap-2">
             <Plus className="h-4 w-4" />
             Nuevo Equipo
           </Button>
-          <Button onClick={showUser} className="flex items-center gap-2">
+          {/* <Button onClick={showUser} className="flex items-center gap-2">
             <Plus className="h-4 w-4" />
             Mostrar usuario
-          </Button>
+          </Button> */}
         </div>
 
-        {showForm && (
+        {showCreateForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <TeamForm
+            <CreateTeamForm
+              // team={editingTeam}
+              onSubmit={handleCreateTeam}
+              onCancel={handleCancelForm}
+              isLoading={isSubmitting}
+            />
+          </div>
+        )}
+
+        {showEditForm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <EditTeamForm
               team={editingTeam}
-              onSubmit={editingTeam ? handleUpdateTeam : handleCreateTeam}
+              onSubmit={handleUpdateTeam}
+              onCancel={handleCancelForm}
+              isLoading={isSubmitting}
+            />
+          </div>
+        )}
+
+        {showImageForm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <ImageTeamForm
+              team={editingTeam}
+              onSubmit={handleUpdateImageTeam}
               onCancel={handleCancelForm}
               isLoading={isSubmitting}
             />
@@ -135,7 +190,7 @@ const MainPage = () => {
             <Users className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">No tienes equipos</h3>
             <p className="text-gray-500 mb-4">Crea tu primer equipo para comenzar</p>
-            <Button onClick={() => setShowForm(true)}>
+            <Button onClick={() => setShowCreateForm(true)}>
               <Plus className="h-4 w-4 mr-2" />
               Crear Equipo
             </Button>
@@ -147,6 +202,7 @@ const MainPage = () => {
                 key={team.id}
                 team={team}
                 onEdit={handleEditTeam}
+                onEditImage={handleEditImageTeam}
                 onView={handleViewTeam}
                 onRefresh={refetch}
               />

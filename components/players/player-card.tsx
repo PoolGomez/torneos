@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { Edit, Trash2, MoreHorizontal, User, Mail, Phone } from 'lucide-react';
+import { Edit, Trash2, MoreHorizontal, User, Mail, Phone, Eye } from 'lucide-react';
 import { Player } from '@/lib/schemas';
 
 import { toast } from 'sonner';
@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { PlayerService } from '@/lib/services/player.services';
+import Image from 'next/image';
 
 interface PlayerCardProps {
   player: Player;
@@ -49,7 +50,60 @@ export function PlayerCard({ player, onEdit, onRefresh }: PlayerCardProps) {
   };
 
   return (
-    <Card className="hover:shadow-lg transition-shadow duration-300">
+
+    <div className="bg-white border rounded-lg shadow-md overflow-hidden transition-transform transform hover:scale-105">
+            <img src={player.photoUrl || "/img/no-image.png"} alt={player.name} className="w-full h-48 object-contain" />
+            <div className="p-2 text-center">
+                <h2 className="pb-2 text-xl font-semibold">{player.name}</h2>
+                <div className="flex justify-around">
+                    <Button 
+                      variant={'outline'}
+                    // onClick={onView} 
+                    // className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
+                    >
+                      <Eye className='w-8 h-8' />
+                        Ver
+                    </Button>
+                    <Button 
+                      variant={'outline'}
+                    // onClick={onEdit} 
+                    // className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition"
+                    >
+                      <Edit className='w-8 h-8' />
+                        Editar
+                    </Button>
+                </div>
+            </div>
+        </div>
+
+    
+    
+  );
+}
+
+{/* <div className="flex flex-col items-center justify-center text-center max-w-[32vw] bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 ">
+      <div className='flex items-center justify-center shrink-0 relative  w-[32vw] h-[32vh] '>
+          
+          <Image className="rounded-t-sm items-center justify-center object-cover" width={150} height={150} src={player.photoUrl || "/img/no-image.png"} alt={player.name}/>
+      </div>
+      <div className="p-5 items-center justify-center">
+          <a href="#">
+              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{player.name}</h5>
+          </a>
+    
+          <a href="#" className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+              Ver Jugador
+              <svg className="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+              </svg>
+          </a>
+      </div>
+  </div> */}
+
+
+
+
+{/* <Card className="hover:shadow-lg transition-shadow duration-300">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="flex items-center gap-3">
           <Avatar>
@@ -60,7 +114,7 @@ export function PlayerCard({ player, onEdit, onRefresh }: PlayerCardProps) {
           </Avatar>
           <div>
             <CardTitle className="text-lg font-semibold">{player.name}</CardTitle>
-            <p className="text-sm text-gray-600">{player.position}</p>
+            <p className="text-sm text-gray-600">{player.name}</p>
           </div>
         </div>
         <DropdownMenu>
@@ -98,6 +152,4 @@ export function PlayerCard({ player, onEdit, onRefresh }: PlayerCardProps) {
           )}
         </div>
       </CardContent>
-    </Card>
-  );
-}
+    </Card> */}

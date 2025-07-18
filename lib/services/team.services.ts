@@ -14,8 +14,9 @@ import { Team, TeamSchema } from '../schemas';
 import { db } from '@/utils/dbconfig';
 
 export class TeamService {
-  static async createTeam(teamData: Omit<Team, 'id' | 'createdAt' | 'updatedAt'>) {
+  static async createTeam(teamData: Omit<Team, 'id' | 'createdAt' | 'updatedAt' | 'profileImage'>) {
     try {
+      console.log("teamData:",teamData)
       const validatedData = TeamSchema.parse({
         ...teamData,
         createdAt: new Date(),
@@ -25,6 +26,7 @@ export class TeamService {
       const docRef = await addDoc(collection(db, 'teams'), validatedData);
       return docRef.id;
     } catch (error) {
+      console.log(error)
       throw new Error('Error al crear el equipo');
     }
   }
@@ -45,6 +47,18 @@ export class TeamService {
     } catch (error) {
       console.log(error)
       throw new Error('Error al obtener los equipos');
+    }
+  }
+
+  static async updateImageTeam(teamId: string, imageUrl: string) {
+    try {
+      const teamDoc = doc(db, 'teams', teamId);
+      await updateDoc(teamDoc, {
+        profileImage: imageUrl,
+        updatedAt: new Date(),
+      });
+    } catch (error) {
+      throw new Error('Error al actualizar el equipo');
     }
   }
 

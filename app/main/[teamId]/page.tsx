@@ -8,8 +8,9 @@ import { Plus, ArrowLeft, Users } from 'lucide-react';
 import { toast } from 'sonner';
 import { PlayerService } from '@/lib/services/player.services';
 import { usePlayers } from '@/hooks/use-players';
-import { PlayerForm } from '@/components/players/player-form';
+// import { PlayerForm } from '@/components/players/player-form';
 import { PlayerCard } from '@/components/players/player-card';
+import { CreatePlayerForm } from '@/components/players/create-player-form';
 
 export default function TeamPage() {
   const params = useParams();
@@ -85,19 +86,19 @@ export default function TeamPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex items-center gap-4 mb-8">
+      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex items-center justify-between gap-4 mb-8">
           <Button
             variant="outline"
-            onClick={() => router.push('/dashboard')}
+            onClick={() => router.push('/main')}
             className="flex items-center gap-2"
           >
             <ArrowLeft className="h-4 w-4" />
-            Volver
+            {/* Volver */}
           </Button>
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-gray-900">Jugadores del Equipo</h1>
-            <p className="text-gray-600 mt-2">Gestiona los jugadores de tu equipo</p>
+            <h1 className="text-3xl font-bold text-gray-900">Jugadores</h1>
+            {/* <p className="text-gray-600 mt-2">Gestiona los jugadores de tu equipo</p> */}
           </div>
           <Button onClick={() => setShowForm(true)} className="flex items-center gap-2">
             <Plus className="h-4 w-4" />
@@ -107,8 +108,15 @@ export default function TeamPage() {
 
         {showForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <PlayerForm
+            {/* <PlayerForm
               player={editingPlayer}
+              teamId={teamId}
+              onSubmit={editingPlayer ? handleUpdatePlayer : handleCreatePlayer}
+              onCancel={handleCancelForm}
+              isLoading={isSubmitting}
+            /> */}
+            <CreatePlayerForm
+              // player={editingPlayer}
               teamId={teamId}
               onSubmit={editingPlayer ? handleUpdatePlayer : handleCreatePlayer}
               onCancel={handleCancelForm}
@@ -128,7 +136,7 @@ export default function TeamPage() {
             </Button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-0">
             {players.map((player) => (
               <PlayerCard
                 key={player.id}
